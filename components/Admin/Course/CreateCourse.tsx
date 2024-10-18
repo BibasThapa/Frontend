@@ -45,7 +45,7 @@ const CreateCourse = (props: Props) => {
       title: "",
       description: "",
       videoSection: "Untitled Section",
-      links: [{ title: "", url: "" }],
+      links: [{ title: "", url: "" },],
       suggestion: "",
     },
   ]);

@@ -3,17 +3,24 @@ import CoursePlayer from '@/utilis/CoursePlayer';
 import NavItems from '@/utilis/NavItems';
 import Ratings from '@/utilis/Ratings';
 import Link from 'next/link';
-import React from 'react';
-import { IoCheckmarkDoneOutline } from 'react-icons/io5';
+import React, { useState } from 'react';
+import { IoCheckmarkDoneOutline, IoCloseOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 import { format } from 'timeago.js';
 import CourseContentList from "@/components/Course/CourseContentList"
+import {Elements} from "@stripe/react-stripe-js"
+import CheckOutForm from '../Payment/CheckOutForm';
+import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
 type Props = {
   data: any;
+  clientSecret:string;
+  stripePromise: any;
 };
 
-const CourseDetails = ({ data }: Props) => {
-  const { user } = useSelector((state: any) => state.auth);
+const CourseDetails = ({ data,stripePromise, clientSecret }: Props) => {
+  const { data:userData } = useLoadUserQuery(undefined,{});
+  const user = userData?.user;
+  const [open, setOpen]= useState(false);
 
   // Calculate discount percentage
   const discountPercentenge = ((data?.estimatedPrice - data.price) / data?.estimatedPrice) * 100;
@@ -22,13 +29,13 @@ const CourseDetails = ({ data }: Props) => {
   // Check if the course is purchased
   const isPurchased = user && user?.courses?.find((item: any) => item._id === data._id);
 
-  const handlerOrder = (e: any) => {
-    // Implement order logic if needed
+  const handleOrder = (e: any) => {
+    setOpen(true)
   };
 
   return (
     <div className="min-h-screen w-full py-5 bg-white dark:bg-gray-900 text-black dark:text-white">
-      {/* Main Layout */}
+    
       <div className="w-[90%] m-auto flex flex-col-reverse 800px:flex-row">
         <div className="w-full 800px:w-[65%] 800px:pr-5">
           {/* Course Title */}
@@ -138,13 +145,40 @@ const CourseDetails = ({ data }: Props) => {
             ) : (
               <div
                 className={`${styles.button}!w-[180px] my-3 font-Poppins cursor-pointer !bg-[crimson]`}
+                onClick={handleOrder}
               >
                 Buy Now Rs{data.price}
               </div>
             )}
           </div>
+
+          <div></div>
         </div>
       </div>
+      <>
+      { open && (
+      <div className='w-full h-screen bg-[#00000036] fixed top-0 left-0 z-50 flex items-center justify-center'>
+        <div className='w-[500px] min-h-[500px] bg-white rounded-xl shadow p-3'>
+          <div className='w-full flex justify-end'>
+            <IoCloseOutline
+            size={40}
+            className='text-black cursor-pointer'
+            onClick={()=> setOpen(false)}
+             />
+          </div>
+          <div className='w-full'>
+            {
+              stripePromise && clientSecret && (
+                <Elements stripe={stripePromise} options={{clientSecret}}>
+                  <CheckOutForm setOpen={setOpen} data={data} />
+                </Elements>
+              )
+            }
+          </div>
+        </div>
+      </div>
+      )}
+      </>
     </div>
   );
 };

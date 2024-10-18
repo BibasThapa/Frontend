@@ -29,62 +29,57 @@ const EditHero: FC<Props> = () => {
   };
 
   const handleEdit = () => {
-    // Function for saving edited hero content
-    console.log('Edited: ', { title, subTitle, image });
+
   };
 
   return (
-    <div className="w-full flex flex-wrap items-center justify-center relative">
-      {/* Background Circle */}
-      <div className="absolute top-[100px] left-[5%] h-[500px] w-[500px] lg:h-[700px] lg:w-[700px] bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full z-0 hero_animation"></div>
+    <div className="w-full 1000px:flex items-center">
+      
+      <div className='absolute top-[100px] 1000px:top-[unset] 1500px:h-[700px] 1500px:w-[700px] 1100px:h-[500px] 1100px:w-[500px] h-[50vh] w-[50vh] hero_animation rounded-[50%] 1100px:left-[18rem] 1500px:left-[21rem]'>
 
-      {/* Image Section */}
-      <div className="w-full lg:w-[40%] flex justify-center lg:justify-end items-center pt-[70px] lg:pt-0 z-10 relative">
-        <div className="relative">
-          {image ? (
+  
+      <div className="1000px:w-[40%] flex 1000px:min-h-screen items-center justify-end pt-[70px] 1000px:pt-[0] z-10">
+        <div className="relative flex items-center justify-end">
             <img
               src={image}
               alt="Banner"
-              className="object-contain max-w-[90%] h-auto rounded-lg shadow-lg"
+              className="object-contain 1100px:max-w-[90%] 1500px:max-w-[85%] h-[auto] z-[10]"
             />
-          ) : (
-            <div className="bg-gray-200 h-[200px] w-[90%] flex justify-center items-center text-gray-500">
-              No image selected
-            </div>
-          )}
+          
           <input
             type="file"
+            name=""
             accept="image/*"
             id="banner"
             className="hidden"
             onChange={handleUpdate}
           />
-          <label htmlFor="banner" className="absolute bottom-2 right-2">
-            <AiOutlineCamera className="text-[18px] cursor-pointer dark:text-white text-black" />
+          <label htmlFor="banner" className="absolute bottom-0 right-0 z-20">
+            <AiOutlineCamera className=" dark:text-white text-black text-[18px] cursor-pointer" />
           </label>
         </div>
       </div>
 
-      {/* Text Section */}
-      <div className="w-full lg:w-[60%] flex flex-col items-center lg:items-start text-center lg:text-left mt-[150px] lg:mt-0 px-4 z-10">
+      
+      <div className="1000px:w-[60%] flex flex-col items-center 1000px:mt-[0px] text-center 1000px:text-left mt-[150px]">
         <textarea
-          className="resize-none w-full text-black dark:text-white text-[40px] lg:text-[60px] xl:text-[70px] font-Poppins leading-tight"
+          className="dark:text-white resize-none text-[#000000c7] text-[30px] px-3 w-full 1000px:text-[60px] 1500px:text-[70px] font-Poppins leading-tight"
           placeholder="Improve Your Online Learning Experience Better Instantly"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          rows={2}
+          rows={4}
         />
         <br />
         <textarea
-          className="resize-none w-full text-black dark:text-[#edf4f4] text-[18px] font-Josefin font-[600] bg-transparent"
+          className="dark:text-[#edfff4] text-[#000000ac] font-Josefin font-[600] text-[18px] 1500px:!w-[55%] 1100px:w-[74%] bg-transparent"
           placeholder="We have 40k+ Online courses & 500k+ Online registered students."
           value={subTitle}
           onChange={(e) => setSubTitle(e.target.value)}
-          rows={2}
-        />
-      </div>
-
-      {/* Save Button */}
+        > </textarea>
+        <br />
+        <br />
+        <br/>
+      
       <div
         className={`${
           styles.button
@@ -105,6 +100,8 @@ const EditHero: FC<Props> = () => {
       >
         Save
       </div>
+    </div>
+    </div>
     </div>
   );
 };

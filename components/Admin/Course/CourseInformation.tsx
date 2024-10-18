@@ -109,7 +109,7 @@ const CourseInformation:FC<Props> = ({courseInfo, setCourseInfo, active, setActi
         </div>
         <br />
         <div className='w-full'>
-          <input type="file" accept='image/*' id='file' className='hiddden' onChange={handleFileChange} />
+          <input type="file" accept='image/*' id='file' className='hidden' onChange={handleFileChange} />
           <label htmlFor='file' className={`w-full min-h-[10vh] dark:border-white border-[#00000026] p-3 border flex items-center justify-center ${dragging ? "bg-blue-500":"bg-transparent"}`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}

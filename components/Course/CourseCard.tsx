@@ -13,20 +13,15 @@ const CourseCard: FC<Props> = ({ item, isProfile }) => {
   return (
     <Link href={!isProfile ? `/course/${item._id}` : `course-access/${item._id}`}>
       <div className='w-full min-h-[35vh] dark:bg-opacity-20 backdrop-blur border dark:border-[#ffffff1d] border-[#00000015] dark:shadow-bg-[bg-slate-700] rounded-lg p-3 shadow-sm dark:shadow-inner'>
-        {item.thumbnail ? (
+        
           <Image 
-            src={item.thumbnail.url} 
+            src={item.thumbnail?.url} 
             width={500} 
             height={300} 
             objectFit="contain" 
             className="rounded-lg" 
             alt=""
           />
-        ) : (
-          <div className="w-full h-[300px] flex items-center justify-center bg-gray-200 rounded-lg">
-            <span>No Image Available</span>
-          </div>
-        )}
 
         <br />
         <h1 className='font-Poppins text-[16px] text-black dark:text-[#fff]'>{item.name}</h1>

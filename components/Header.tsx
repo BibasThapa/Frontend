@@ -93,9 +93,11 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute }) => {
                 {user ? (
                   <Link href="/profile">
                     <Image
-                      src={user.avatar ? user.avatar : avatar}
+                      src={user.avatar ? user.avatar.url : avatar}
                       alt="User Avatar"
                       className="w-[30px] h-[30px] rounded-full cursor-pointer"
+                      width={30}
+                      height={30}
                     />
                   </Link>
                 ) : (
@@ -118,9 +120,11 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute }) => {
               {user ? (
                 <Link href="/profile">
                   <Image
-                    src={user.avatar ? user.avatar : avatar}
+                    src={user.avatar ? user.avatar.url : avatar}
                     alt="User Avatar"
                     className="w-[30px] h-[30px] rounded-full cursor-pointer"
+                    width={30}
+                    height={30}
                   />
                 </Link>
               ) : (

@@ -10,8 +10,8 @@ const Hero: FC<Props> = () => {
     <div className="relative w-full min-h-screen flex flex-col md:flex-row items-center bg-white dark:bg-black px-4 py-10 md:px-16 lg:px-24">
       
       <div className="w-full md:w-1/2 flex justify-center">
-        <img
-          src="https://edmy-react.hibootstrap.com/images/banner/banner-img-1.png"
+        <Image
+          src={require("../public/assests/banner-img-1.png")}
           alt="Hero Image"
           className="object-contain w-full max-w-[80%] md:max-w-[70%] lg:max-w-[60%] h-auto"
         />
@@ -37,19 +37,19 @@ const Hero: FC<Props> = () => {
         </div>
 
         
-        <div className="flex items-center space-x-4 mb-6">
-          <img
-            src="https://edmy-react.hibootstrap.com/images/banner/client-3.jpg"
+        <div className="flex items-center 1500px:w-[55%] 1100px:w-[78%] w-[90%]">
+          <Image
+            src={require("../public/assests/client-1.jpg")}
             alt="Client Image 1"
             className="rounded-full w-12 h-12 lg:w-16 lg:h-16"
           />
-          <img
-            src="https://edmy-react.hibootstrap.com/images/banner/client-1.jpg"
+          <Image
+            src={require("../public/assests/client-2.jpg")}
             alt="Client Image 2"
             className="rounded-full w-12 h-12 lg:w-16 lg:h-16"
           />
-          <img
-            src="https://edmy-react.hibootstrap.com/images/banner/client-2.jpg"
+          <Image
+            src={require("../public/assests/client-3.jpg")}
             alt="Client Image 3"
             className="rounded-full w-12 h-12 lg:w-16 lg:h-16"
           />
