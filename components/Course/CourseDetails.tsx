@@ -27,7 +27,10 @@ const CourseDetails = ({ data,stripePromise, clientSecret }: Props) => {
   const discountPercentengePrice = discountPercentenge.toFixed(0);
 
   // Check if the course is purchased
-  const isPurchased = user && user?.courses?.find((item: any) => item._id === data._id);
+  const isPurchased = user && user?.courses?.find((item: any) =>item.courseId===data._id);
+  console.log("Is purchased", user?.courses)
+  console.log("Is purchased", data?._id);
+
 
   const handleOrder = (e: any) => {
     setOpen(true)
@@ -152,7 +155,7 @@ const CourseDetails = ({ data,stripePromise, clientSecret }: Props) => {
             )}
           </div>
 
-          <div></div>
+          
         </div>
       </div>
       <>

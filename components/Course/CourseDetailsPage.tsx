@@ -29,6 +29,7 @@ const CourseDetailsPage = ({id}:Props) => {
     },[config, data]);
 
     useEffect(()=>{
+      console.log("paymentIntentData",paymentIntentData)
       if(paymentIntentData){
         setClientSecret(paymentIntentData?.client_secret)
       }

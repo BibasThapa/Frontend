@@ -104,7 +104,7 @@ const CourseContentMedia = ({ data, id, activeVideo, setActiveVideo, user, refet
                     <AiOutlineArrowRight className='ml-2' />
                 </div>
             </div>
-            <h1 className='pt-2 text-[25px] font-[600] dark:text-white text-black'>{data[activeVideo].title}</h1>
+            <h1 className='pt-2 text-[25px] font-[600] dark:text-white text-black'>{data[activeVideo]?.title}</h1>
             <br />
             <div className='w-full p-4 flex items-center justify-between  bg-slate-500 bg-opacity-20 backdrop-blur shadow-[bg-slate-700] rounded shadow-inner'>
                 {["Overview", "Resources", "Q&A", "Reviews"].map((text, index) => (

@@ -5,6 +5,8 @@ import { LinkAuthenticationElement, PaymentElement, useElements, useStripe } fro
 import { redirect } from 'next/navigation';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
 
 type Props = {
     setOpen: any;
@@ -32,20 +34,27 @@ const CheckOutForm = ({ setOpen, data }: Props) => {
             elements,
             redirect: "if_required",
         });
+       
+
 
         if (paymentError) {
             setMessage(paymentError.message ?? "An unknown error occurred");
             setIsLoading(false);
         } else if (paymentIntent && paymentIntent.status === "succeeded") {
             setIsLoading(false);
-            await createOrder({ courseId: data._id, payment_info: paymentIntent });
+             createOrder({ courseId: data._id, payment_info: paymentIntent });
         }
     };
 
     useEffect(() => {
         if (orderData) {
             setLoadUser(true);
-            redirect(`/course-access/${data._id}`); // use router.push instead of redirect
+            redirect(`/course-access/${data._id}`); 
+        } if (error){
+            if("data"in error){
+                const errorMessage = error as any;
+                toast.error(errorMessage.data.message)
+            }
         }
     }, [orderData, error]);
 
