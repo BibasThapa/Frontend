@@ -22,17 +22,17 @@ export const apiSlice = createApi({
                     credentials: "include" as const,
                 }),
                 async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-                    try {
-                      const result = await queryFulfilled;
-                      dispatch(
-                        userLoggedIn({
-                          accessToken: result.data.activationToken, 
-                          user:result.data.user,
-                        })
-                      );
-                    } catch (error) {
-                      console.error("Login Error: ", error);
-                    }
+                  try {
+                    const result = await queryFulfilled;
+                    dispatch(
+                      userLoggedIn({
+                        accessToken: result.data.activationToken, 
+                        user:result.data.user,
+                      })
+                    );
+                  } catch (error) {
+                    console.error("Login Error: ", error);
+                  }
                   },
         })
     }),

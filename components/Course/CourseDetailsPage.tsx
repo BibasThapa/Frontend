@@ -43,7 +43,7 @@ const CourseDetailsPage = ({id}:Props) => {
         ):(
             <div>
                 <Heading
-                    title={data.course.name +"-Elearning"}
+                    title={data?.course?.name +"-Elearning"}
                     description= {"Elearning is a platform for students to learn"}
                     keywords={data?.course?.tags}
                 />

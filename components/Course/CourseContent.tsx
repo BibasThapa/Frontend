@@ -13,7 +13,7 @@ const CourseContent = ({id, user}:Props) => {
   const {data:contentData,isLoading,refetch} = useGetCourseContentQuery(id,{refetchOnMountOrArgChange:true});
   const [open, setOpen] = useState(false)
   const [route, setRoute] = useState('Login')
-  const data = contentData?.content ||  [];
+  const data = contentData?.content || [];
   const [activeVideo, setActiveVideo] = useState(0)
   return (
     <>
@@ -34,7 +34,6 @@ const CourseContent = ({id, user}:Props) => {
           <div className='col-span-7'>
             <CourseContentMedia 
             data={data}
-            
             id={id}
             activeVideo={activeVideo}
             setActiveVideo={setActiveVideo}

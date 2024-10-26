@@ -25,7 +25,8 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
     initialValues: { email: "", password: "" },
     validationSchema: schema,
     onSubmit: async ({ email, password }) => {
-      await login({ email, password });
+     const response= await login({ email, password });
+     sessionStorage.setItem('accessToken', response.data.accessToken);
     },
   });
   useEffect(() => {

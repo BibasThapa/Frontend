@@ -74,7 +74,7 @@ const CourseContentMedia = ({ data, id, activeVideo, setActiveVideo, user, refet
         if(answerError){
             if("data" in answerError){
                 const errorMessage = error as any;
-                toast.error(errorMessage.data.message)
+                toast.error(errorMessage?.data?.message)
             }
         }
     }, [isSuccess, error, answerError, answerSuccess])

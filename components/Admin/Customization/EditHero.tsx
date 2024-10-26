@@ -1,6 +1,7 @@
 import { styles } from '@/app/styles/style';
-import { useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
+import { useEditLayoutMutation, useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
 import React, { FC, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { AiOutlineCamera } from 'react-icons/ai';
 
 type Props = {};
@@ -10,7 +11,8 @@ const EditHero: FC<Props> = () => {
   const [title, setTitle] = useState<string>('');
   const [subTitle, setSubTitle] = useState<string>('');
 
-  const { data } = useGetHeroDataQuery('Banner', { refetchOnMountOrArgChange: true });
+  const { data, refetch } = useGetHeroDataQuery('Banner', { refetchOnMountOrArgChange: true });
+  const [editLayout,{isLoading,isSuccess, error}]= useEditLayoutMutation ()
 
   useEffect(() => {
     if (data) {
@@ -18,7 +20,17 @@ const EditHero: FC<Props> = () => {
       setSubTitle(data?.layout?.banner.subTitle);
       setImage(data?.layout?.banner?.image?.url);
     }
-  }, [data]);
+    if(isSuccess){
+      refetch()
+      toast.success("Hero update Succcessfully")
+    }
+    if(error){
+      if("data" in error){
+        const errorData = error as any;
+        toast.error(errorData?.data?.message)
+      }
+    }
+  }, [data, isSuccess, error]);
 
   const handleUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -28,8 +40,13 @@ const EditHero: FC<Props> = () => {
     }
   };
 
-  const handleEdit = () => {
-
+  const handleEdit = async () => {
+    await editLayout({
+      type:"Banner",
+      image,
+      title,
+      subTitle,
+    })
   };
 
   return (

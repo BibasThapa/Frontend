@@ -17,6 +17,8 @@ import {
   QuizIcon,
   ManageHistoryIcon,
   SettingsIcon,
+  WysiwygIcon,
+  ExitToAppIcon,
 } from "./Icon";
 import "react-pro-sidebar/dist/css/styles.css";
 import avatarDefault from "@/public/assests/avatar.png";
@@ -51,6 +53,7 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const [mounted, setMounted] = useState(false);
+  const [logout, setLogout] = useState(false);
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -60,6 +63,9 @@ const Sidebar = () => {
 
   if (!mounted) {
     return null;
+  }
+  const logoutHandler = () =>{
+ setLogout(true)
   }
 
   return (
@@ -167,7 +173,8 @@ const Sidebar = () => {
               {!isCollapsed && "Customization"}
             </Typography>
             <Item title="Hero" to="/admin/hero" icon={<WebIcon />} selected={selected} setSelected={setSelected} />
-            <Item title="FAQ" to="/faq" icon={<QuizIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="FAQ" to="/admin/faq" icon={<QuizIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="Categories" to="/admin/categories" icon={<WysiwygIcon />} selected={selected} setSelected={setSelected} />
 
             <Typography
               variant="h5"
@@ -197,6 +204,8 @@ const Sidebar = () => {
               {!isCollapsed && "Extras"}
             </Typography>
             <Item title="Settings" to="/admin/settings" icon={<SettingsIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="Logout" to="/" icon={<ExitToAppIcon/>} selected={selected} setSelected={setSelected}  />
+            
           </Box>
         </Menu>
       </ProSidebar>
