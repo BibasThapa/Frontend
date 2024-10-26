@@ -8,6 +8,7 @@ import { styles } from "../../app/styles/style";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { toast } from "react-hot-toast";
 import {signIn} from "next-auth/react";
+import Loader from "../Loader/Loader";
 type Props = {
   setRoute: (route: string) => void;
   setOpen: (open: boolean) => void;
@@ -20,13 +21,13 @@ const schema = Yup.object().shape({
 
 const Login: FC<Props> = ({ setRoute, setOpen }) => {
   const [show, setShow] = useState(false);
-  const [login, { isSuccess, error }] = useLoginMutation();
+  const [login, { isSuccess,isLoading, error }] = useLoginMutation();
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: schema,
     onSubmit: async ({ email, password }) => {
      const response= await login({ email, password });
-     sessionStorage.setItem('accessToken', response.data.accessToken);
+     sessionStorage.setItem('accessToken', JSON.stringify(response.data));
     },
   });
   useEffect(() => {
@@ -44,6 +45,12 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
   const { errors, touched, values, handleChange, handleSubmit } = formik;
 
   return (
+    <>
+    {
+      isLoading ? (
+        <Loader />
+      ):(
+    
     <div className="w-full">
       <h1 className={`${styles.title} dark:text-white`}> {/* Added dark mode for title */}
         Login with Elearning
@@ -115,6 +122,8 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
         </h5>
       </form>
     </div>
+      )}
+    </>
   );
 };
 

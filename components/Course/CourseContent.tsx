@@ -11,12 +11,14 @@ type Props = {
 }
 const CourseContent = ({id, user}:Props) => {
   const {data:contentData,isLoading,refetch} = useGetCourseContentQuery(id,{refetchOnMountOrArgChange:true});
+  console.log("object",contentData)
   const [open, setOpen] = useState(false)
   const [route, setRoute] = useState('Login')
   const data = contentData?.content || [];
   const [activeVideo, setActiveVideo] = useState(0)
   return (
     <>
+    {
       isLoading ? (
         <Loader />
       ):(
@@ -50,6 +52,7 @@ const CourseContent = ({id, user}:Props) => {
         </div>
         </>
       )
+    }
     </>
   )
 }

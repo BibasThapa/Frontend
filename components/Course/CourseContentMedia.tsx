@@ -28,7 +28,7 @@ const CourseContentMedia = ({ data, id, activeVideo, setActiveVideo, user, refet
     const [questionId, setQuestionId] = useState('')
     const [addNewQuestion, { isSuccess, error, isLoading: questionCreationLoading }] = useAddNewQuestionMutation();
     const [addAnswerInQuestion,{isSuccess:answerSuccess, error:answerError, isLoading:answerCreationLoading}]= useAddAnswerInQuestionMutation ();
-
+    console.log("data",data)
     const isReviewExists = data?.reviews?.find((item: any) => item.user._id === user._id)
     const handleQuestion = () => {
         if (question.length === 0) {
@@ -47,7 +47,9 @@ const CourseContentMedia = ({ data, id, activeVideo, setActiveVideo, user, refet
             if ("data" in error) {
                 const errorMessage = error as any;
                 toast.error(errorMessage.data.message);
+                
             }
+            console.log("data",data)
         }
     }, [isSuccess, error])
 
@@ -85,24 +87,23 @@ const CourseContentMedia = ({ data, id, activeVideo, setActiveVideo, user, refet
                 videoUrl={data[activeVideo]?.videoUrl}
             />
             <div className='w-full flex items-center justify-between my-3'>
-                <div
-                    className={`${styles.button} text-white  !w-[unset] !min-h-[40px] !py-[unset] ${activeVideo === 0 && "!cursor-no-drop opacity-[.8]"
-                        }`}
+                <button className='text-white bg-blue-500 font-semibold text-2xl rounded-lg flex justify-center item-center p-2'
+                   
                     onClick={() =>
                         setActiveVideo(activeVideo === 0 ? 0 : activeVideo - 1)
                     }
                 >
-                    <AiOutlineArrowLeft className='mr-2' />
+                    <AiOutlineArrowLeft className='mr-2 mt-1.5' />
                     Prev Lesson
-                </div>
-                <div className={`${styles.button} !w-[unset] text-white  !min-h-[40px] !py-[unset] ${data.length - 1 === activeVideo && "!cursor-no-drop opacity-[.8]"
-                    }`}
+                </button>
+                <button className='text-white bg-blue-500 font-semibold text-2xl rounded-lg flex justify-center item-center p-2'
+
                     onClick={() => setActiveVideo(
                         data && data.length - 1 === activeVideo ? activeVideo : activeVideo + 1
                     )} >
                     NextLesson
-                    <AiOutlineArrowRight className='ml-2' />
-                </div>
+                    <AiOutlineArrowRight className='ml-2 mt-1.5' />
+                </button>
             </div>
             <h1 className='pt-2 text-[25px] font-[600] dark:text-white text-black'>{data[activeVideo]?.title}</h1>
             <br />

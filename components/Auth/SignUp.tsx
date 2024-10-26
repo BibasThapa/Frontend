@@ -7,6 +7,8 @@ import { FcGoogle } from "react-icons/fc";
 import { styles } from "../../app/styles/style";
 import { useRegisterMutation } from "@/redux/features/auth/authApi";
 import { toast } from "react-hot-toast";
+import Loader from "../Loader/Loader";
+
 
 type Props = {
     setRoute: (route: string) => void;
@@ -20,8 +22,8 @@ const schema = Yup.object().shape({
 
 const SignUp: FC<Props> = ({ setRoute }) => {
     const [show, setShow] = useState(false);
-    const [register, { data, error, isSuccess }] = useRegisterMutation();
-
+    const [register, { data,isLoading, error, isSuccess }] = useRegisterMutation();
+    
     useEffect(() => {
         if (isSuccess) {
             const message = data?.message || "Registration successful";
@@ -52,6 +54,12 @@ const SignUp: FC<Props> = ({ setRoute }) => {
     const { errors, touched, values, handleChange, handleSubmit } = formik;
 
     return (
+        <>
+        {
+            isLoading ?(
+                <Loader />
+            ):(
+        
         <div className="w-full">
             <h1 className={`${styles.title} dark:text-white`}>
                 Join to Elearning
@@ -139,6 +147,8 @@ const SignUp: FC<Props> = ({ setRoute }) => {
                 </h5>
             </form>
         </div>
+            )}
+            </>
     );
 };
 

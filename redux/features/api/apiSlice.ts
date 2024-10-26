@@ -15,26 +15,37 @@ export const apiSlice = createApi({
                 credentials: "include" as const,
             }),
         }),
-        loadUser: builder.query({
+        loadUserInformation: builder.mutation({
                 query:(data) =>({
-                    url:"me",
-                    method:"GET",
-                    credentials: "include" as const,
-                }),
-                async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-                  try {
-                    const result = await queryFulfilled;
-                    dispatch(
-                      userLoggedIn({
-                        accessToken: result.data.activationToken, 
-                        user:result.data.user,
-                      })
-                    );
-                  } catch (error) {
-                    console.error("Login Error: ", error);
-                  }
-                  },
-        })
+                    url:"user-information",
+                    method:"POST",
+                    body:{
+                      data
+                    }
+                })
+        }),
+
+        loadUser: builder.query({
+          query:(data) =>({
+              url:"me",
+              method:"GET",
+              credentials: "include" as const,
+          }),
+          async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+            try {
+              const result = await queryFulfilled;
+              const value = sessionStorage.getItem('accessToken');
+              dispatch(
+                userLoggedIn({
+                  accessToken: value || '', 
+                  user:result.data.user,
+                })
+              );
+            } catch (error) {
+              console.error("Login Error: ", error);
+            }
+            },
+  })
     }),
 });
-export const {useRefreshTokenQuery,useLoadUserQuery} = apiSlice;
+export const {useRefreshTokenQuery,useLoadUserQuery, useLoadUserInformationMutation} = apiSlice;

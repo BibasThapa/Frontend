@@ -3,14 +3,15 @@ import CoursePlayer from '@/utilis/CoursePlayer';
 import NavItems from '@/utilis/NavItems';
 import Ratings from '@/utilis/Ratings';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoCheckmarkDoneOutline, IoCloseOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 import { format } from 'timeago.js';
 import CourseContentList from "@/components/Course/CourseContentList"
 import {Elements} from "@stripe/react-stripe-js"
 import CheckOutForm from '../Payment/CheckOutForm';
-import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
+import { useLoadUserInformationMutation, useLoadUserQuery } from '@/redux/features/api/apiSlice';
+import Loader from '../Loader/Loader';
 type Props = {
   data: any;
   clientSecret:string;
@@ -18,8 +19,27 @@ type Props = {
 };
 
 const CourseDetails = ({ data,stripePromise, clientSecret }: Props) => {
-  const { data:userData } = useLoadUserQuery(undefined,{});
-  const user = userData?.user;
+  // const { data:userData } = useLoadUserInformationQuery();
+  const [fetchUserInformation, { isLoading, isSuccess, error }] = useLoadUserInformationMutation();
+  const [isPurchased, setIsPurchased] = useState(false);
+  const [user, setUser] = useState(null);
+  
+  useEffect(() => {
+    const accessToken = sessionStorage.getItem('accessToken');
+    const parsedToken = accessToken ? JSON.parse(accessToken) : null;
+    const userId=parsedToken.user._id
+    const fetchData = async () => {
+      const response=await fetchUserInformation(userId);
+      setUser(response.data.user);
+      const purchased =  response.data.user.courses.some((item: any) =>item?.courseId===data._id);
+      setIsPurchased(purchased)
+    };
+
+    fetchData();
+  }, [])
+
+
+  // const user = userData?.user;
   const [open, setOpen]= useState(false);
 
   // Calculate discount percentage
@@ -27,9 +47,7 @@ const CourseDetails = ({ data,stripePromise, clientSecret }: Props) => {
   const discountPercentengePrice = discountPercentenge.toFixed(0);
 
   // Check if the course is purchased
-  const isPurchased = user && user?.courses?.find((item: any) =>item._id===data._id);
-  console.log("Is purchased", user?.courses)
-  console.log("Is purchased", data?._id);
+  // console.log("Is purchased", user?.courses)
 
 
   const handleOrder = (e: any) => {
@@ -37,6 +55,13 @@ const CourseDetails = ({ data,stripePromise, clientSecret }: Props) => {
   };
 
   return (
+    <>
+    {
+     user && isLoading ?(
+            <Loader />
+        ):(
+      
+ 
     <div className="min-h-screen w-full py-5 bg-white dark:bg-gray-900 text-black dark:text-white">
     
       <div className="w-[90%] m-auto flex flex-col-reverse 800px:flex-row">
@@ -183,6 +208,8 @@ const CourseDetails = ({ data,stripePromise, clientSecret }: Props) => {
       )}
       </>
     </div>
+)}
+  </>
   );
 };
 

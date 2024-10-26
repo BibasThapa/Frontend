@@ -8,6 +8,7 @@ type Props = {
 const CoursePlayer:FC<Props> = ({
     videoUrl
 }) => {
+    console.log("Vidor Url",videoUrl)
     const [videoData, setVideoData] = useState({
         otp:"",
         playbackInfo:"",

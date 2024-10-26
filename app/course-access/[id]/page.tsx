@@ -29,11 +29,11 @@ const page = ({params}:Props) =>{
     return (
         <>
         {
-            isLoading ? (
+            false ? (
                 <Loader />
             ) : (
-                <div>
-                    <CourseContent id ={id} user={data.user}/>
+                <div  className='dark:bg-black'>
+                    <CourseContent id ={id} user={data?.user}/>
                 </div>
             )
         }
