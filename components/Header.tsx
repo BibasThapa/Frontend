@@ -16,6 +16,7 @@ import avatar from "@/public/assests/avatar.png";
 import { useSession } from "next-auth/react";
 import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/authApi";
 import { toast } from "react-hot-toast";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 
 type Props = {
   open: boolean;
@@ -28,7 +29,7 @@ type Props = {
 const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
-  const { user } = useSelector((state: any) => state.auth);
+  const {data:userData, isLoading, refetch} = useLoadUserQuery(undefined,{})
   const { data } = useSession();
   const [socialAuth, { isSuccess }] = useSocialAuthMutation();
   const { resolvedTheme } = useTheme();
@@ -36,18 +37,23 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute }) => {
   const {} = useLogOutQuery(undefined, { skip: !logout ? true : false });
 
   useEffect(() => {
-    if (!user) {
+    if(!isLoading){
+    if (!userData) {
       if (data) {
         socialAuth({ email: data?.user?.email, name: data?.user?.name, avatar: data.user?.image });
+        refetch()
       }
-      if (data !== null || isSuccess) {
+      }
+      if (data !== null){
+         if(isSuccess) {
         toast.success("Login Successfully");
       }
-      if (data === null) {
+    }
+      if (data === null && !isLoading && !userData) {
         setLogout(true);
       }
     }
-  }, [data, user]);
+  }, [data, userData, isLoading]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -90,10 +96,10 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute }) => {
               <NavItems activeItem={activeItem} isMobile={false} />
               <div className="relative flex items-center space-x-4">
                 <ThemeSwitcher />
-                {user ? (
+                {userData ? (
                   <Link href="/profile">
                     <Image
-                      src={user.avatar ? user.avatar.url : avatar}
+                      src={userData?.user.avatar ? userData.user.avatar.url : avatar}
                       alt="User Avatar"
                       className="w-[30px] h-[30px] rounded-full cursor-pointer"
                       width={30}
@@ -117,10 +123,10 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute }) => {
                 className="cursor-pointer dark:text-white text-black"
                 onClick={() => setOpenSidebar(true)}
               />
-              {user ? (
+              {userData ? (
                 <Link href="/profile">
                   <Image
-                    src={user.avatar ? user.avatar.url : avatar}
+                    src={userData?.user.avatar ?userData.user.avatar.url : avatar}
                     alt="User Avatar"
                     className="w-[30px] h-[30px] rounded-full cursor-pointer"
                     width={30}
@@ -164,6 +170,7 @@ const Header: FC<Props> = ({ open, setOpen, activeItem, route, setRoute }) => {
           setRoute={setRoute}
           activeItem={activeItem}
           component={Login}
+          refetch={refetch}
         />
       )}
       {route === "Sign-Up" && open && (

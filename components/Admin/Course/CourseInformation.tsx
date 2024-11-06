@@ -1,5 +1,6 @@
-import React, {FC, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {styles} from '@/app/styles/style'
+import { useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
 type Props ={
   courseInfo:any;
   setCourseInfo: (courseInfo:any) => void;
@@ -9,6 +10,14 @@ type Props ={
 
 const CourseInformation:FC<Props> = ({courseInfo, setCourseInfo, active, setActive}) => {
   const [dragging, setDragging] = useState(false);
+  const { data} = useGetHeroDataQuery("Categories", {
+  })
+  const[categories,setCategories] = useState([]);
+  useEffect(()=> {
+    if(data){
+      setCategories(data.layout.categories)
+    }
+  },[data])
   const handleSubmit = (e:any) =>{
     e.preventDefault();
     setActive(active + 1);
@@ -83,13 +92,29 @@ const CourseInformation:FC<Props> = ({courseInfo, setCourseInfo, active, setActi
         </div>
        </div>
        <br />
-       <div >
-          <label className={`${styles.label}`} htmlFor='email'>Course Tags</label>
+       <div className='w-full flex justify-between'>
+        <div className="w-[45%]">
+        <label className={`${styles.label}`} htmlFor='email'>Course Tags</label>
           <input type="text" name='' required value={courseInfo.tags} onChange={(e:any) =>
             setCourseInfo({...courseInfo, tags: e.target.value})
           } id="tags" placeholder='Mern stack'className={`${styles.input}`} />
+        </div>
+        <div className="w-[45%]">
+          <label className={`${styles.label} w-[50%]`}>Course Categories</label>
+          <select name="" id="" className={`${styles.input}`} required value={courseInfo.category} onChange={(e:any)=>
+            setCourseInfo({...courseInfo, category:e.target.value})
+          } >
+            <option value="">Select Category</option>
+            {categories.map((item:any)=>(
+              <option value={item.title} key={item._id}>{item.title}</option>
+            ))}
+          </select>
 
         </div>
+        </div>
+       
+        
+        
         <br />
         <div className='w-full flex justify-between'>
         <div className="w-[45%]">

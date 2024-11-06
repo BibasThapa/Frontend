@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import Heading from '@/utilis/Heading';
 import Header from '@/components/Header';
-import About from './about';
+import FAQ from '@/components/FAQ/FAQ';
+
 
 type Props = {};
 
@@ -36,8 +37,8 @@ const Page = (props: Props) => {
         setRoute={setRoute}
         route={route}
       />
-      <About />
-      <button onClick={toggleTheme}>Toggle Theme</button> {/* Button to toggle theme */}
+      <FAQ />
+      
     </div>
   );
 }

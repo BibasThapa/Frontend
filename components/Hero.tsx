@@ -1,11 +1,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { FC } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { FC, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 
 type Props = {};
 
 const Hero: FC<Props> = () => {
+  const [search, setSearch] = useState("");
+  const router = useRouter()
+  const handleSearch = () =>{
+    if(search === ""){
+      return
+    }else{
+      router.push(`/courses?title=${search}`)
+    }
+  }
   return (
     <div className="relative w-full min-h-screen flex flex-col md:flex-row items-center bg-white dark:bg-black px-4 py-10 md:px-16 lg:px-24">
       
@@ -31,11 +41,17 @@ const Hero: FC<Props> = () => {
           <input
             type="search"
             placeholder="Search Courses..."
-            className="flex-grow bg-transparent border border-gray-300 dark:border-gray-600 rounded-[5px] p-3 outline-none dark:placeholder-[#f5f5f5] placeholder-[#333]"
+            value={search}
+            onChange={(e)=>setSearch(e.target.value)}
+            className="flex-grow bg-transparent border dark:text-white text-black border-gray-300 dark:border-gray-600 rounded-[5px] p-3 outline-none dark:placeholder-[#f5f5f5] placeholder-[#333]"
           />
+          <div className='flex items-center justify-center w-[50px] h-[50px] cursor-pointer bg-[#39c1f3] rounded-r-[5px]'
+          onClick={handleSearch} >
           <BiSearch className="ml-3 text-[#111] dark:text-[#fff]" />
         </div>
-
+        </div>
+        <br />
+        <br />
         
         <div className="flex items-center 1500px:w-[55%] 1100px:w-[78%] w-[90%]">
           <Image

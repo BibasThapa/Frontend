@@ -27,7 +27,7 @@ const CourseDetails = ({ data,stripePromise, clientSecret }: Props) => {
   useEffect(() => {
     const accessToken = sessionStorage.getItem('accessToken');
     const parsedToken = accessToken ? JSON.parse(accessToken) : null;
-    const userId=parsedToken.user._id
+    const userId=parsedToken?.user?._id
     const fetchData = async () => {
       const response=await fetchUserInformation(userId);
       setUser(response.data.user);
@@ -136,7 +136,7 @@ const CourseDetails = ({ data,stripePromise, clientSecret }: Props) => {
                     <div className="flex">
                       {/* User Icon */}
                       <div className="w-[50px] h-[50px] bg-slate-600 rounded-full flex items-center justify-center">
-                        <h1 className="uppercase text-[18px] text-white">{item.user.name.slice(0, 2)}</h1>
+                        <h1 className="uppercase text-[18px] text-white"> {item.user && item.user.name ? item.user.name.slice(0, 2) : "N/A"}</h1>
                       </div>
                       {/* Review Content */}
                       <div className="pl-2">

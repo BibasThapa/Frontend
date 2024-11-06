@@ -2,13 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import Heading from '@/utilis/Heading';
 import Header from '@/components/Header';
-import About from './about';
+import Footer from '@/components/Footer';
+import Policy from './Policy';
+
 
 type Props = {};
 
 const Page = (props: Props) => {
   const [open, setOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState(2);
+  const [activeItem, setActiveItem] = useState(3);
   const [route, setRoute] = useState("Login");
   const [theme, setTheme] = useState('light-mode'); // Default to light mode
 
@@ -25,7 +27,7 @@ const Page = (props: Props) => {
   return (
     <div className={theme}>
       <Heading 
-        title="About us - Elearning"
+        title="Policy - Elearning"
         description="Elearning is a platform for students to learn"
         keywords="Programming"
       />
@@ -36,8 +38,9 @@ const Page = (props: Props) => {
         setRoute={setRoute}
         route={route}
       />
-      <About />
-      <button onClick={toggleTheme}>Toggle Theme</button> {/* Button to toggle theme */}
+      <Policy />
+      <Footer />
+      
     </div>
   );
 }

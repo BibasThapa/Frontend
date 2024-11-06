@@ -9,7 +9,7 @@ import { IoMdAddCircleOutline } from 'react-icons/io';
 type Props = {};
 
 const EditFaq = (props: Props) => {
-  const { data, isLoading } = useGetHeroDataQuery('FAQ', {
+  const { data, isLoading, refetch } = useGetHeroDataQuery('FAQ', {
     refetchOnMountOrArgChange: true,
   });
 
@@ -17,11 +17,15 @@ const EditFaq = (props: Props) => {
   const [questions, setQuestions] = useState<any[]>([]);
 
   useEffect(() => {
-    if (data) {
-      setQuestions(data?.layout?.faq);
+    if (data && Array.isArray(data.layout?.faq)) {
+      setQuestions(data.layout.faq);
+    } else {
+      setQuestions([]);
     }
+
     if (isSuccess) {
       toast.success('FAQ updated successfully');
+      refetch();  // Fetch the latest data immediately after a successful update
     }
     if (error) {
       if ('data' in error) {
@@ -29,7 +33,7 @@ const EditFaq = (props: Props) => {
         toast.error(errorData?.data?.message);
       }
     }
-  }, [data, isSuccess, error]);
+  }, [data, isSuccess, error, refetch]);
 
   const toggleQuestion = (id: any) => {
     setQuestions((prevQuestions) =>
@@ -50,14 +54,17 @@ const EditFaq = (props: Props) => {
   };
 
   const newFaqHandler = () => {
-    setQuestions([
-      ...questions,
-      {
-        question: '',
-        answer: '',
-         
-      },
-    ]);
+    if (Array.isArray(questions)) {
+      setQuestions([
+        ...questions,
+        {
+          _id: `new-${Date.now()}`, // Temporary unique ID for new FAQ
+          question: '',
+          answer: '',
+          active: true,
+        },
+      ]);
+    }
   };
 
   const areQuestionsUnchanged = (originalQuestions: any[], newQuestions: any[]) => {
@@ -68,17 +75,16 @@ const EditFaq = (props: Props) => {
     return questions.some((q) => q.question === '' || q.answer === '');
   };
 
-  const handleEdit = async () => {
-    if (
-      !areQuestionsUnchanged(data?.layout?.faq, questions) &&
-      !isAnyQuestionEmpty(questions)
-    ) {
+  const handleEdit = async()=> {
+    if(
+      !areQuestionsUnchanged(data?.layout?.faq || [],questions) && !isAnyQuestionEmpty(questions)
+    ){
       await editLayout({
-        type: 'FAQ',
-        faq: questions,
-      });
+        type:"FAQ",
+        faq:questions,
+      })
     }
-  };
+  }
 
   return (
     <div className='w-[90%] 800px:w-[80%] m-auto mt-[120px]'>
@@ -87,7 +93,7 @@ const EditFaq = (props: Props) => {
           {questions?.map((q: any) => (
             <div
               key={q._id}
-              className={`${q._id !== questions[0]?._id && 'border-t'} border-gray-200 pt-6`}
+              className={`${q._id !== questions[0]?._id ? 'border-t' : ''} border-gray-200 pt-6`}
             >
               <dt className='text-lg'>
                 <button
