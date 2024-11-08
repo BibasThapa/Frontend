@@ -23,22 +23,29 @@ const Page = (props: Props) => {
     const [category, setCategory] = useState("All");
 
     useEffect(() => {
-           if(category === "All"){
-            setcourses(data?.courses);
-           }
-           if(category !== "All"){
-            setcourses(
-                data?.courses.filter((item:any)=> item.categories === category)
-            );
-           }
-        
-           if(search){
-            setcourses(
-                data?.courses.filter((item:any)=> item.name.toLowerCase().includes(search.toLowerCase()))
-            )
-           }
+        if (data?.courses) {
+            let filteredCourses = data.courses;
+    
+            if (category !== "All") {
+                // Assuming item.categories is an array, we check if it includes the selected category.
+                filteredCourses = filteredCourses.filter((item: any) =>
+                    Array.isArray(item.categories)
+                        ? item.categories.includes(category)
+                        : item.categories === category
+                );
+            }
+    
+            if (search) {
+                filteredCourses = filteredCourses.filter((item: any) =>
+                    item.name.toLowerCase().includes(search.toLowerCase())
+                );
+            }
+    
+            setcourses(filteredCourses);
+        }
     }, [data, category, search]);
-    const categories =categoriesData?.layout.categories
+    const categories =categoriesData?.layout?.categories
+    console.log("object", categoriesData?.layout)
 
     return (
         <div>
