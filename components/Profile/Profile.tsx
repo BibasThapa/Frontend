@@ -5,15 +5,13 @@ import { useLogOutQuery } from "@/redux/features/auth/authApi";
 import { signOut } from "next-auth/react";
 import ProfileInfo from "./ProfileInfo";
 import ChangePassword from "./ChangePassword";
+import { useGetUsersAllCoursesQuery } from "@/redux/features/courses/coursesApi";
+import CourseCard from "../Course/CourseCard";
 
-type User = {
-  avatar?: string;
-  name: string;
-  email: string;
-};
+
 
 type Props = {
-  user: User;
+  user: any;
 };
 
 const Profile: FC<Props> = ({ user }) => {
@@ -22,11 +20,14 @@ const Profile: FC<Props> = ({ user }) => {
   const [logout, setLogout] = useState(false);
   const {} = useLogOutQuery(undefined, { skip: !logout });
   const [active, setActive] = useState(1);
+  const [courses,setCourses] = useState([])
+  const {data, isLoading} = useGetUsersAllCoursesQuery(undefined,{})
+
 
 
   const logOutHandler = async () => {
-    signOut();
-    await setLogout(true);
+   setLogout(true);
+    await signOut();
   };
 
   useEffect(() => {
@@ -45,6 +46,12 @@ const Profile: FC<Props> = ({ user }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  useEffect(()=>{
+    if(data){
+      const filteredCourses = user.courses.map((userCourse:any)=> courses._id === userCourse._id).filter((course:any)=> course !== undefined);
+      setCourses(filteredCourses)
+    }
+  },[data])
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-300">
@@ -65,8 +72,32 @@ const Profile: FC<Props> = ({ user }) => {
         <div
           className="w-full h-full bg-transparent mt-[80px]"
         >
-          {active === 1 && <ProfileInfo avatar={avatar} user={user} />}
-          {active === 2 && <ChangePassword />}
+          {active === 1 && ( 
+            <div className="w-full h-full bg-transparent mt-[80px]">
+            <ProfileInfo avatar={avatar} user={user} /> </div>)}
+            {active === 2 && ( 
+            <div className="w-full h-full bg-transparent mt-[80px]">
+            <ChangePassword /> </div>)}
+            {
+              active === 3 && (
+                <div> 
+                  <div>
+                    {
+                      courses && courses.map((item:any, index:number)=> (
+                        <CourseCard item={item} key={index}  isProfile={true} />
+                      ))
+                    }
+                     </div>
+                     {
+                      courses.length === 0 && (
+                        <h1 className="text-center text-[18px] font-Poppins">
+                          You dont have any purchased course
+                        </h1>
+                      )
+                     }
+                </div>
+              )
+            }
         </div>
       </div>
     </div>
